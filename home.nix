@@ -1,37 +1,35 @@
 { pkgs, inputs, ... }:
 
-let
-  doomEmacs = inputs.nix-doom-emacs.packages.x86_64-linux.default.override {
-    doomPrivateDir = ./doom.d;  # Seu config Doom
-  };
-in {
+{
   imports = [
     ./modules/gtk.nix
     ./modules/terminal.nix
     ./modules/hyprland.nix
+    inputs.nix-doom-emacs.hmModule
   ];
 
   home.username = "csrand";
   home.homeDirectory = "/home/csrand";
   home.stateVersion = "23.11";
 
-  programs.emacs = {
+  programs.doom-emacs = {
     enable = true;
-    package = doomEmacs;  # Agora usa o pacote correto
-  };
-
-  home.file.".doom.d" = {
-    source = ./doom.d;
-    recursive = true;
+    doomPrivateDir = ./doom.d;
   };
 
   home.sessionVariables = {
     EDITOR = "emacsclient -c";
     VISUAL = "emacsclient -c";
-    DOOMDIR = "$HOME/.doom.d";
   };
 
   home.packages = with pkgs; [
+    # Essential Doom Emacs dependencies
+    binutils
+    gnutls
+    zlib
+    emacs-all-the-icons-fonts
+    
+    # Your existing packages
     git ripgrep fd
     (aspellWithDicts (d: with d; [ en en-computers en-science ]))
     wget wl-clipboard waybar kitty swaylock networkmanagerapplet

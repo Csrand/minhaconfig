@@ -2,8 +2,7 @@
   description = "My NixOS Configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     hyprland.url = "github:hyprwm/Hyprland";
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     catppuccin.url = "github:catppuccin/nix";
@@ -20,10 +19,8 @@
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
-      # REMOVIDO overlays com nix-doom-emacs porque não existe overlay nesse flake
     };
   in {
-    # Configuração do sistema NixOS
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       inherit pkgs;
       system = system;
@@ -33,7 +30,6 @@
       modules = [
         ./configuration.nix
         hyprland.homeManagerModules.default
-        # Home Manager integrado ao NixOS
         home-manager.nixosModules.home-manager
         {
           home-manager = {
@@ -48,7 +44,6 @@
       ];
     };
 
-    # Home Manager standalone (para rodar `home-manager switch`)
     homeConfigurations.csrand = home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [ ./home.nix ];

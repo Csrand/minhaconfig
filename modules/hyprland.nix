@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, hm, ... }:
 
 {
 
@@ -37,7 +37,7 @@
       bind = $mainMod SHIFT, Return, exec, alacritty --hold -e neofetch --ascii_distro nixos
       bind = $mainMod, Q, killactive
       bind = $mainMod SHIFT, F, exec, firefox
-      bind = $mainMod SHIFT, Q, systemctl poweroff
+      bind = $mainMod SHIFT, Q, exec, systemctl poweroff
 
       # Move focus with mainMod + vim keys
       bind = $mainMod, H, movefocus, l
