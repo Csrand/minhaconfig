@@ -8,7 +8,7 @@ in {
   imports = [
     ./modules/gtk.nix
     ./modules/terminal.nix
-    ./modules.hyprland.nix
+    ./modules/hyprland.nix
   ];
 
   home.username = "csrand";
