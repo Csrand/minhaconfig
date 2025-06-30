@@ -1,8 +1,7 @@
 { pkgs, inputs, ... }:
 
 {
-  hyprland.nixosModules.default
-  programs.hyprland.enable = true; 
+
   wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
@@ -38,7 +37,7 @@
       bind = $mainMod SHIFT, Return, exec, alacritty --hold -e neofetch --ascii_distro nixos
       bind = $mainMod, Q, killactive
       bind = $mainMod SHIFT, F, exec, firefox
-      bind = $mainMod SHIFT, Q, exit
+      bind = $mainMod SHIFT, Q, systemctl poweroff
 
       # Move focus with mainMod + vim keys
       bind = $mainMod, H, movefocus, l
@@ -78,17 +77,4 @@
       bindm = $mainMod, mouse:273, resizewindow
     '';
   };
-
-
-  # --- CONFIGURAÇÃO DO HYPRPAPER INICIA AQUI ---
-  services.hyprpaper = {
-    enable = true; # Habilita o daemon hyprpaper
-    settings = {
-      animation = "transition,500"; # Formato: "nome_da_animacao,duracao_ms"
-      preload = "auto";
-      ipc = true;
-      splash = false;    
-    };
-  };  
 }
-

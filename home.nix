@@ -1,25 +1,23 @@
 { pkgs, inputs, ... }:
 
-{
+let
+  doomEmacs = inputs.nix-doom-emacs.packages.x86_64-linux.default.override {
+    doomPrivateDir = ./doom.d;  # Seu config Doom
+  };
+in {
   imports = [
     ./modules/gtk.nix
-    ./modules/hyprland.nix
     ./modules/terminal.nix
+    ./modules.hyprland.nix
   ];
 
   home.username = "csrand";
   home.homeDirectory = "/home/csrand";
   home.stateVersion = "23.11";
 
-  # Editor principal: Doom Emacs
   programs.emacs = {
     enable = true;
-    package = pkgs.doom-emacs;  # Usa o pacote que você passou pelo flake
-  };
-
-  services.emacs = {
-    enable = true;
-    client.enable = true;
+    package = doomEmacs;  # Agora usa o pacote correto
   };
 
   home.file.".doom.d" = {
