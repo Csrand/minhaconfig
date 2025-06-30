@@ -7,53 +7,39 @@
     ./modules/terminal.nix
   ];
 
-  # Configuração do Emacs/Doom
-  home.packages = with pkgs; [
-    # Pacote doom-emacs
-    (pkgs.doom-emacs.override {
-      doomPrivateDir = ./doom.d;  # Diretório com sua configuração
-    })
-    
-    # Dependências essenciais
-    git
-    ripgrep
-    fd
-    emacs  # Emacs básico para fallback
-  ];
+  home.username = "csrand";
+  home.homeDirectory = "/home/csrand";
+  home.stateVersion = "23.11";
+
+  # Editor principal: Doom Emacs
+  programs.emacs = {
+    enable = true;
+    package = pkgs.doom-emacs;  # Usa o pacote que você passou pelo flake
+  };
 
   services.emacs = {
     enable = true;
-    package = pkgs.doom-emacs;
-    client = {
-      enable = true;
-      arguments = [ "-c" ];  # Abre em nova frame
-    };
+    client.enable = true;
+  };
+
+  home.file.".doom.d" = {
+    source = ./doom.d;
+    recursive = true;
   };
 
   home.sessionVariables = {
     EDITOR = "emacsclient -c";
     VISUAL = "emacsclient -c";
+    DOOMDIR = "$HOME/.doom.d";
   };
 
-  # Seu resto de pacotes
   home.packages = with pkgs; [
-    wget
-    wl-clipboard
-    waybar
-    kitty
-    swaylock
-    networkmanagerapplet
-    xdg-utils
-    libsForQt5.qt5.qtwayland
-    pavucontrol
-    hyprpaper
+    git ripgrep fd
+    (aspellWithDicts (d: with d; [ en en-computers en-science ]))
+    wget wl-clipboard waybar kitty swaylock networkmanagerapplet
+    xdg-utils libsForQt5.qt5.qtwayland
+    pavucontrol hyprpaper
     nerd-fonts.fira-code
-    curl
-    file
-    neofetch
+    curl file neofetch
   ];
-
-  home.username = "csrand";
-  home.homeDirectory = "/home/csrand";
-  home.stateVersion = "23.11";
 }
